@@ -38,4 +38,4 @@ management:
 
 testing:
   profile:
-    name: dev
+    name: kkpp
