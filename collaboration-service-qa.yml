@@ -1,7 +1,40 @@
+# =========================
+# Collaboration Service – QA
+# =========================
+
+spring:
+  datasource:
+    url: jdbc:mysql://collaboration-mysql-qa:3306/collaboration_service?useSSL=true&serverTimezone=UTC
+    username: mr.mime
+    password: StudyBuddy*123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      maximum-pool-size: 8
+      minimum-idle: 2
+
+  rabbitmq:
+    host: rabbitmq-qa
+    port: 5672
+    username: guest
+    password: guest
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    repair: false   # QA should NOT auto-repair schemas
+
 logging:
   level:
     root: INFO
     com.studybuddy: INFO
+    org.springframework.jdbc.core: INFO
+
+management:
+  endpoint:
+    health:
+      show-details: when_authorized
 
 testing:
   profile:

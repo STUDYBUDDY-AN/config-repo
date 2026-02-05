@@ -1,0 +1,21 @@
+# =========================
+# Config Server – QA
+# =========================
+
+spring:
+  rabbitmq:
+    host: rabbitmq-qa
+    port: 5672
+    username: guest
+    password: guest
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.config: INFO
+    org.springframework.web: WARN
+
+management:
+  endpoint:
+    health:
+      show-details: when_authorized
