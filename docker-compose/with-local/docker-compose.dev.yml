@@ -248,8 +248,16 @@ services:
       SPRING_CONFIG_IMPORT: optional:configserver:http://config-server-dev-local:8888
 
       # Service Discovery (Manual for now)
-      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://account-service-dev-local:8081
-      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://collaboration-service-dev-local:8082
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_ID: account-service
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_URI: http://account-service-dev-local:8081
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_PREDICATES_0: Path=/studybuddy/users/**
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_FILTERS_0: RewritePath=/studybuddy/users/(?<segment>.*), /users/$\{segment}
+
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_ID: collaboration-service
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_URI: http://collaboration-service-dev-local:8082
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_PREDICATES_0: Path=/studybuddy/groups/**
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_FILTERS_0: RewritePath=/studybuddy/groups/(?<segment>.*), /groups/$\{segment}
+
 
       # 🔍 Rabbit MQ (DEV)
       SPRING_RABBITMQ_HOST: rabbitmq-dev-local

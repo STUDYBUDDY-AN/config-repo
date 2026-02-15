@@ -5,22 +5,24 @@
 spring:
   cloud:
     gateway:
-      routes:
-        - id: account-service
-          uri: http://account-service-dev:8081
-          predicates:
-            - Path=/studybuddy/users/**
-          filters:
-            - RewritePath=/studybuddy/users/(?<segment>.*), /users/${segment}
-        - id: collaboration-service
-          uri: http://collaboration-service-dev:8082
-          predicates:
-            - Path=/studybuddy/groups/**
-          filters:
-            - RewritePath=/studybuddy/groups/(?<segment>.*), /api/v1/groups/${segment}
-      httpclient:
-        connect-timeout: 1000
-        response-timeout: 10s
+      server:
+        webflux:
+          routes:
+            - id: account-service
+              uri: http://account-service-dev:8081
+              predicates:
+                - Path=/studybuddy/users/**
+              filters:
+                - RewritePath=/studybuddy/users/(?<segment>.*), /users/${segment}
+            - id: collaboration-service
+              uri: http://collaboration-service-dev:8082
+              predicates:
+                - Path=/studybuddy/groups/**
+              filters:
+                - RewritePath=/studybuddy/groups/(?<segment>.*), /api/v1/groups/${segment}
+        httpclient:
+          connect-timeout: 1000
+          response-timeout: 10s
 
 logging:
   pattern:
