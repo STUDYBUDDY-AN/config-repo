@@ -1,0 +1,769 @@
+{
+    "info": {
+        "_postman_id": "studybuddy-collection",
+        "name": "StudyBuddy API",
+        "description": "API Collection for StudyBuddy Microservices, routed via API Gateway.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Account Service",
+            "item": [
+                {
+                    "name": "Users",
+                    "item": [
+                        {
+                            "name": "Get My Profile",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/me",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        "me"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Update My Profile",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"username\": \"newname\",\n  \"bio\": \"Updated bio\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/me",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        "me"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Get Public Profile",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/:id",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        ":id"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "id",
+                                            "value": "{{userId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Test Endpoint",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/test",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        "test"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Preferences",
+                    "item": [
+                        {
+                            "name": "Get Preferences",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/me/preferences",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        "me",
+                                        "preferences"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Update Preferences",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"theme\": \"dark\",\n  \"notifications\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/me/preferences",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        "me",
+                                        "preferences"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Privacy",
+                    "item": [
+                        {
+                            "name": "Get Privacy Settings",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/me/privacy",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        "me",
+                                        "privacy"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Update Privacy Settings",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"profileVisibility\": \"PUBLIC\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/users/me/privacy",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "users",
+                                        "me",
+                                        "privacy"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Admin",
+                    "item": [
+                        {
+                            "name": "List All Users",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/admin/users",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "admin",
+                                        "users"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Deactivate User",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{access_token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/account/admin/users/:id",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "account",
+                                        "admin",
+                                        "users",
+                                        ":id"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "id",
+                                            "value": "{{userId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Collaboration Service",
+            "item": [
+                {
+                    "name": "Groups",
+                    "item": [
+                        {
+                            "name": "Create Group",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "X-User-Id",
+                                        "value": "{{userId}}"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"Study Group 101\",\n  \"description\": \"Java Concurrency\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Join Group",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "X-User-Id",
+                                        "value": "{{userId}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/:groupId/join",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        ":groupId",
+                                        "join"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "groupId",
+                                            "value": "{{groupId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Get Group",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/:groupId",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        ":groupId"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "groupId",
+                                            "value": "{{groupId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Get My Groups",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "X-User-Id",
+                                        "value": "{{userId}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/me",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        "me"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Get All Groups",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/all",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        "all"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Get Group Members",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/:groupId/members",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        ":groupId",
+                                        "members"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "groupId",
+                                            "value": "{{groupId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Messages",
+                    "item": [
+                        {
+                            "name": "Send Message",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "X-User-Id",
+                                        "value": "{{userId}}"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"content\": \"Hello World!\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/:groupId/messages",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        ":groupId",
+                                        "messages"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "groupId",
+                                            "value": "{{groupId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Get Messages",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/:groupId/messages",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        ":groupId",
+                                        "messages"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "groupId",
+                                            "value": "{{groupId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Notes",
+                    "item": [
+                        {
+                            "name": "Upload Note",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "X-User-Id",
+                                        "value": "{{userId}}"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"title\": \"Lecture 1\",\n  \"fileUrl\": \"http://minio/bucket/file.pdf\",\n  \"fileType\": \"application/pdf\",\n  \"fileSizeBytes\": 1024\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/:groupId/notes",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        ":groupId",
+                                        "notes"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "groupId",
+                                            "value": "{{groupId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Search Notes",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/groups/:groupId/notes?q=lecture&offset=0&limit=10",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "groups",
+                                        ":groupId",
+                                        "notes"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "q",
+                                            "value": "lecture"
+                                        },
+                                        {
+                                            "key": "offset",
+                                            "value": "0"
+                                        },
+                                        {
+                                            "key": "limit",
+                                            "value": "10"
+                                        }
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "groupId",
+                                            "value": "{{groupId}}"
+                                        }
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Files",
+                    "item": [
+                        {
+                            "name": "Upload File",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "file",
+                                            "type": "file",
+                                            "src": []
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/files/upload",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "files",
+                                        "upload"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Presign File Upload (User)",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "X-User-Id",
+                                        "value": "{{userId}}"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"fileName\": \"avatar.jpg\",\n  \"fileType\": \"image/jpeg\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/api/v1/files/presign/file",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "api",
+                                        "v1",
+                                        "files",
+                                        "presign",
+                                        "file"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Test",
+                    "item": [
+                        {
+                            "name": "Test Profile",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/studybuddy/collab/test/profile",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "studybuddy",
+                                        "collab",
+                                        "test",
+                                        "profile"
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -11,15 +11,17 @@ spring:
             - id: account-service
               uri: http://account-service-dev:8081
               predicates:
-                - Path=/studybuddy/users/**
+                - Path=/studybuddy/account/**
               filters:
-                - RewritePath=/studybuddy/users/(?<segment>.*), /users/${segment}
+                - RewritePath=/studybuddy/account/(?<segment>.*), /${segment}
+
             - id: collaboration-service
               uri: http://collaboration-service-dev:8082
               predicates:
-                - Path=/studybuddy/groups/**
+                - Path=/studybuddy/collab/**
               filters:
-                - RewritePath=/studybuddy/groups/(?<segment>.*), /api/v1/groups/${segment}
+                - RewritePath=/studybuddy/collab/(?<segment>.*), /${segment}
+
         httpclient:
           connect-timeout: 1000
           response-timeout: 10s
