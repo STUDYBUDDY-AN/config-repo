@@ -1,3 +1,27 @@
+# -------------------------------------------------------------
+# Reusable Configurations (Anchors)
+# -------------------------------------------------------------
+x-rabbitmq-config: &rabbitmq-config
+  SPRING_RABBITMQ_HOST: rabbitmq-dev
+  SPRING_RABBITMQ_PORT: 5672
+  SPRING_RABBITMQ_USERNAME: guest
+  SPRING_RABBITMQ_PASSWORD: guest
+
+x-common-env: &common-env
+  SPRING_PROFILES_ACTIVE: dev
+  CONFIG_SERVER_HOST: config-server-dev
+  SPRING_CONFIG_IMPORT: optional:configserver:http://config-server-dev:8888
+  <<: *rabbitmq-config
+
+x-common-depends: &common-depends
+  config-server-dev:
+    condition: service_healthy
+  rabbitmq-dev:
+    condition: service_healthy
+
+# -------------------------------------------------------------
+# Main Services Configuration
+# -------------------------------------------------------------
 networks: 
   public-dev:
     driver: bridge
@@ -39,17 +63,11 @@ services:
       - "8888:8888"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      # 🔍 Rabbit MQ (DEV)
-      SPRING_RABBITMQ_HOST: rabbitmq-dev
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: guest
-      SPRING_RABBITMQ_PASSWORD: guest
+      <<: *rabbitmq-config
 
       # 🔍 Bootstrap logging (DEV)
-      LOGGING_LEVEL_ROOT: INFO
       LOGGING_LEVEL_COM_STUDYBUDDY: DEBUG
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_JDBC_CORE: DEBUG
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG: DEBUG
     depends_on:
       rabbitmq-dev:
         condition: service_healthy
@@ -104,34 +122,25 @@ services:
       retries: 5
 
   # -------------------------
-  # Collaboration Service (PUBLIC)
+  # Collaboration Service
   # -------------------------
   collaboration-service-dev:
     image: toxicgeek/collaboration-service:latest
     container_name: collaboration-service-dev
     networks: 
-      - public-dev
       - internal-dev
     ports:
       - "8082:8082"
     environment:
-      SPRING_PROFILES_ACTIVE: dev
-      CONFIG_SERVER_HOST: config-server-dev
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server-dev:8888
-
+      <<: *common-env
+      
       # 🔍 Bootstrap logging (DEV)
-      LOGGING_LEVEL_ROOT: INFO
-      LOGGING_LEVEL_COM_STUDYBUDDY: DEBUG
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_JDBC_CORE: DEBUG
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG: DEBUG
     depends_on:
-      config-server-dev:
-        condition: service_healthy
+      <<: *common-depends
       collaboration-mysql-dev:
         condition: service_healthy
       collaboration-minio-dev:
-        condition: service_healthy
-      rabbitmq-dev:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
@@ -139,6 +148,88 @@ services:
       timeout: 5s
       retries: 5
 
+  # -------------------------
+  # Account Infra
+  # -------------------------
+  account-mysql-dev:
+    image: mysql:8.0
+    container_name: account-mysql-dev
+    networks:
+      - internal-dev
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: StudyBuddy*123
+      MYSQL_DATABASE: accountsdb
+      MYSQL_USER: mr.mime
+      MYSQL_PASSWORD: StudyBuddy*123
+    volumes:
+      - account_mysql_data_dev:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u$$MYSQL_USER -p$$MYSQL_PASSWORD || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # -------------------------
+  # Account Service
+  # -------------------------
+  account-service-dev:
+    image: toxicgeek/account-service:latest
+    container_name: account-service-dev
+    networks:
+      - internal-dev
+    ports:
+      - "8081:8081"
+    environment:
+      <<: *common-env
+
+      # 🔍 Bootstrap logging (DEV)
+      LOGGING_LEVEL_ROOT: DEBUG
+      LOGGING_LEVEL_COM_STUDYBUDDY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_JDBC_CORE: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG: DEBUG
+    depends_on:
+      <<: *common-depends
+      account-mysql-dev:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------
+  # Gateway Service (PUBLIC - ENTRYPOINT)
+  # -------------------------
+  gateway-server-dev:
+    image: toxicgeek/gateway-server:latest
+    container_name: gateway-server-dev
+    networks:
+      - public-dev
+      - internal-dev
+    ports:
+      - "8080:8080"
+    environment:
+      <<: *common-env
+
+    depends_on:
+      <<: *common-depends
+      account-service-dev:
+        condition: service_healthy
+      collaboration-service-dev:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
 volumes:
   collaboration_mysql_data_dev:
   collaboration_minio_data_dev:
+  account_mysql_data_dev:

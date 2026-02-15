@@ -2,19 +2,6 @@
 # Config Server – DEV
 # =========================
 
-spring:
-  rabbitmq:
-    host: rabbitmq-dev
-    port: 5672
-    username: guest
-    password: guest
-
-logging:
-  level:
-    root: INFO
-    org.springframework.cloud.config: DEBUG
-    org.springframework.web: INFO
-
 management:
   endpoint:
     health:
