@@ -133,9 +133,7 @@ services:
       - "8082:8082"
     environment:
       <<: *common-env
-      
-      # 🔍 Bootstrap logging (DEV)
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG: DEBUG
+    
     depends_on:
       <<: *common-depends
       collaboration-mysql-dev:
@@ -188,11 +186,6 @@ services:
     environment:
       <<: *common-env
 
-      # 🔍 Bootstrap logging (DEV)
-      LOGGING_LEVEL_ROOT: DEBUG
-      LOGGING_LEVEL_COM_STUDYBUDDY: DEBUG
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_JDBC_CORE: DEBUG
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG: DEBUG
     depends_on:
       <<: *common-depends
       account-mysql-dev:
