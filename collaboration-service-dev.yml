@@ -35,6 +35,18 @@ management:
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true
+
+    info:
+      env:
+        enabled: true
+
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
 
 testing:
   profile:

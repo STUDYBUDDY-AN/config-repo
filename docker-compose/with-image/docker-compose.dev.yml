@@ -1,0 +1,144 @@
+networks: 
+  public-dev:
+    driver: bridge
+  internal-dev:
+    driver: bridge
+    internal: true
+
+services:
+  # -------------------------
+  # Common Infrastructure
+  # -------------------------
+  rabbitmq-dev:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq-dev
+    networks:
+      - internal-dev
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------
+  # Configuration Server (PUBLIC)
+  # -------------------------
+  config-server-dev:
+    image: toxicgeek/config-server:latest
+    container_name: config-server-dev
+    networks:
+      - public-dev
+      - internal-dev
+    ports:
+      - "8888:8888"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      # 🔍 Rabbit MQ (DEV)
+      SPRING_RABBITMQ_HOST: rabbitmq-dev
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+
+      # 🔍 Bootstrap logging (DEV)
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_COM_STUDYBUDDY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_JDBC_CORE: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG: DEBUG
+    depends_on:
+      rabbitmq-dev:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------
+  # Collaboration Infra (PRIVATE)
+  # -------------------------
+  collaboration-mysql-dev:
+    image: mysql:8.0
+    container_name: collaboration-mysql-dev
+    networks:
+      - internal-dev
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: StudyBuddy*123
+      MYSQL_DATABASE: collaboration_service
+      MYSQL_USER: mr.mime
+      MYSQL_PASSWORD: StudyBuddy*123
+    volumes:
+      - collaboration_mysql_data_dev:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u$$MYSQL_USER -p$$MYSQL_PASSWORD || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  collaboration-minio-dev:
+    image: minio/minio
+    container_name: collaboration-minio-dev
+    networks:
+      - internal-dev
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - collaboration_minio_data_dev:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------
+  # Collaboration Service (PUBLIC)
+  # -------------------------
+  collaboration-service-dev:
+    image: toxicgeek/collaboration-service:latest
+    container_name: collaboration-service-dev
+    networks: 
+      - public-dev
+      - internal-dev
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_HOST: config-server-dev
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server-dev:8888
+
+      # 🔍 Bootstrap logging (DEV)
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_COM_STUDYBUDDY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_JDBC_CORE: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG: DEBUG
+    depends_on:
+      config-server-dev:
+        condition: service_healthy
+      collaboration-mysql-dev:
+        condition: service_healthy
+      collaboration-minio-dev:
+        condition: service_healthy
+      rabbitmq-dev:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  collaboration_mysql_data_dev:
+  collaboration_minio_data_dev:
