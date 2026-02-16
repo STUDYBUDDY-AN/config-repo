@@ -13,14 +13,14 @@ spring:
               predicates:
                 - Path=/studybuddy/account/**
               filters:
-                - RewritePath=/studybuddy/account/(?<segment>.*), /${segment}
+                - RewritePath=/studybuddy/(?<segment>.*), /${segment}
 
             - id: collaboration-service
               uri: http://collaboration-service-dev:8082
               predicates:
                 - Path=/studybuddy/collab/**
               filters:
-                - RewritePath=/studybuddy/collab/(?<segment>.*), /${segment}
+                - RewritePath=/studybuddy/(?<segment>.*), /${segment}
 
         httpclient:
           connect-timeout: 1000
